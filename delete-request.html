@@ -117,7 +117,7 @@
         <main>
             <div class="document">
                 <h1>Delete Account Request</h1>
-                <form id="deleteRequestForm" action="mailto:itskibas@gmail.com" method="GET">
+                <form id="deleteRequestForm">
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email" id="email" name="email" required placeholder="Enter your email address">
@@ -132,7 +132,7 @@
                     </div>
                     <button type="submit" class="submit-btn">Submit Request</button>
                 </form>
-                <p class="confirmation" style="margin-top:1.5rem;">If your email client does not open automatically, please send your request manually to <a href="mailto:itskibas@gmail.com" style="color:var(--primary-color);">itskibas@gmail.com</a>.</p>
+                <div id="formMessage" class="confirmation" style="margin-top:1.5rem;"></div>
             </div>
         </main>
         <footer>
@@ -144,4 +144,45 @@
         </footer>
     </div>
 </body>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+  // Firebase config from firebase_options.dart (web)
+  const firebaseConfig = {
+    apiKey: "AIzaSyC4TQwbZ9gznvlfee_vsQ_Y9MDmqMI9-Vw",
+    authDomain: "afterm-5759a.firebaseapp.com",
+    projectId: "afterm-5759a",
+    storageBucket: "afterm-5759a.firebasestorage.app",
+    messagingSenderId: "739324103655",
+    appId: "1:739324103655:web:YOUR_WEB_APP_ID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const form = document.getElementById('deleteRequestForm');
+  const formMessage = document.getElementById('formMessage');
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    formMessage.textContent = '';
+    const email = document.getElementById('email').value.trim();
+    const userId = document.getElementById('userId').value.trim();
+    const confirmDelete = document.getElementById('confirmDelete').checked;
+    if (!email || !userId || !confirmDelete) {
+      formMessage.textContent = 'Please fill in all fields and confirm deletion.';
+      return;
+    }
+    try {
+      await db.collection('delete_requests').add({
+        email,
+        userId,
+        confirmed: true,
+        requestedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      form.reset();
+      formMessage.textContent = 'Your delete request has been submitted. Our team will process it soon.';
+    } catch (err) {
+      formMessage.textContent = 'Failed to submit request. Please try again later.';
+    }
+  });
+</script>
 </html> 
