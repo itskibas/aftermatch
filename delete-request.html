@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account Request - AfterMatch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8a2be2;
+            --background-color: #0d0c22;
+            --text-color: #ffffff;
+            --text-secondary-color: #a0a0a0;
+            --container-bg-color: #1a1936;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            line-height: 1.8;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            padding: 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+        .document {
+            background: var(--container-bg-color);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left;
+        }
+        .document h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+        input[type="email"], input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            background: #23214a;
+            color: var(--text-color);
+        }
+        input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+        .submit-btn {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .submit-btn:hover {
+            background: #6c1bb0;
+        }
+        .confirmation {
+            color: var(--text-secondary-color);
+            font-size: 0.95rem;
+        }
+        footer {
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .footer-links a {
+            color: var(--text-secondary-color);
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">AfterMatch</a>
+        </header>
+        <main>
+            <div class="document">
+                <h1>Delete Account Request</h1>
+                <form id="deleteRequestForm" action="mailto:itskibas@gmail.com" method="POST" enctype="text/plain">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="userId">User ID</label>
+                        <input type="text" id="userId" name="userId" required placeholder="Enter your user ID">
+                    </div>
+                    <div class="form-group confirmation">
+                        <input type="checkbox" id="confirmDelete" name="confirmDelete" required>
+                        <label for="confirmDelete" style="display:inline;font-weight:400;">I confirm that I want to permanently delete my AfterMatch account and all associated data.</label>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Request</button>
+                </form>
+            </div>
+        </main>
+        <footer>
+            <div class="footer-links">
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <a href="terms-of-service.html">Terms of Service</a>
+                <p style="color: var(--text-secondary-color); font-size: 0.9rem; margin-top: 1.5rem;">© 2024 AfterMatch. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html> 
