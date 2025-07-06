@@ -216,6 +216,8 @@
         .feature:nth-child(1) .feature-icon { animation-delay: 0s; }
         .feature:nth-child(2) .feature-icon { animation-delay: 0.2s; }
         .feature:nth-child(3) .feature-icon { animation-delay: 0.4s; }
+        .feature:nth-child(4) .feature-icon { animation-delay: 0.6s; }
+        .feature:nth-child(4) .game-icon { animation-delay: 0.6s; }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
@@ -233,6 +235,51 @@
             font-size: 0.8rem;
             color: var(--text-muted);
             line-height: 1.4;
+        }
+
+        .feature.game-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature.game-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .game-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.8rem;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .game-icon.truth-or-dare { background: linear-gradient(135deg, #8B5CF6, #A855F7); }
+        .game-icon.this-or-that { background: linear-gradient(135deg, #10B981, #06D6A0); }
+        .game-icon.hot-take { background: linear-gradient(135deg, #F59E0B, #F97316); }
+        .game-icon.would-you-rather { background: linear-gradient(135deg, #3B82F6, #6366F1); }
+        .game-icon.what-if { background: linear-gradient(135deg, #EC4899, #F472B6); }
+        .game-icon.mini-games { 
+            background: linear-gradient(135deg, #8B5CF6, #10B981, #F59E0B, #3B82F6); 
+            background-size: 300% 300%;
+            animation: gradientShift 3s ease infinite, pulse 2s infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .footer {
@@ -285,7 +332,7 @@
             }
             
             .features {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
             
             .footer-links {
@@ -329,12 +376,17 @@
                 <h3>Privacy First</h3>
                 <p>Your data stays secure and private</p>
             </div>
+            <div class="feature game-card">
+                <div class="game-icon mini-games">🎮</div>
+                <h3>Fun Mini Games</h3>
+                <p>Truth or Dare, This or That, Hot Takes & more!</p>
+            </div>
         </div>
 
         <footer class="footer">
             <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <a href="terms-of-service.html">Terms of Service</a>
             </div>
             <p class="copyright">&copy; 2024 AfterMatch. All rights reserved.</p>
         </footer>
