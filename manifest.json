@@ -1,0 +1,27 @@
+{
+  "name": "AfterMatch - Find Your Connection",
+  "short_name": "AfterMatch",
+  "description": "Move beyond the swipe. Discover meaningful relationships with people who truly get you.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f23",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/images/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/images/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["social", "dating", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr"
+} 
