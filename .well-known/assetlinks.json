@@ -1,1 +1,15 @@
-
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.kibas.aftermatch",
+      "sha256_cert_fingerprints": [
+        "EC:1F:35:C3:07:D9:DB:9A:4E:0A:D2:D9:8F:9E:6B:0A:0F:68:65:44:58:BF:EE:7D:8D:BA:EA:5C:A6:9D:FA:C0"
+      ]
+    }
+  }
+]
