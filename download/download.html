@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download AfterMatch</title>
+    <meta name="description" content="Download AfterMatch - The ultimate matching app for iOS and Android">
+
+    <!-- Open Graph tags for better social media sharing -->
+    <meta property="og:title" content="Download AfterMatch">
+    <meta property="og:description" content="Get AfterMatch on your phone now!">
+    <meta property="og:type" content="website">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: white;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin: 10px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .store-badge {
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .store-badge img {
+            height: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .store-badge img:hover {
+            transform: scale(1.05);
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .redirecting {
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .manual-links {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        .manual-links h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .platform-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">🎮</div>
+        <h1>Download AfterMatch</h1>
+        <p id="message">Redirecting you to the app store...</p>
+        <div class="spinner" id="spinner"></div>
+
+        <div class="manual-links" id="manualLinks" style="display: none;">
+            <h2>Choose your platform:</h2>
+            <a href="#" id="iosLink" class="download-btn" style="display: none;">
+                📱 Download on App Store
+            </a>
+            <a href="#" id="androidLink" class="download-btn" style="display: none;">
+                🤖 Get it on Google Play
+            </a>
+
+            <div class="platform-info" id="platformInfo"></div>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ IMPORTANT: Replace these with your actual app store URLs
+        const APP_STORE_URL = 'https://apps.apple.com/ma/app/aftermatch-make-friends/id6748354608'; // Replace YOUR_APP_ID with actual App Store ID
+        const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.kibas.aftermatch';
+
+        // Alternative deeplink URLs (optional - try to open the app if already installed)
+        const IOS_DEEPLINK = 'aftermatch://'; // Customize if you have a custom URL scheme
+        const ANDROID_DEEPLINK = 'aftermatch://'; // Customize if you have a custom URL scheme
+
+        function detectPlatform() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // iOS detection
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return 'ios';
+            }
+
+            // Android detection
+            if (/android/i.test(userAgent)) {
+                return 'android';
+            }
+
+            // Desktop/Unknown
+            return 'desktop';
+        }
+
+        function redirect() {
+            const platform = detectPlatform();
+            const spinner = document.getElementById('spinner');
+            const message = document.getElementById('message');
+            const manualLinks = document.getElementById('manualLinks');
+            const iosLink = document.getElementById('iosLink');
+            const androidLink = document.getElementById('androidLink');
+            const platformInfo = document.getElementById('platformInfo');
+
+            // Set up manual links
+            iosLink.href = APP_STORE_URL;
+            androidLink.href = PLAY_STORE_URL;
+
+            if (platform === 'ios') {
+                message.textContent = 'Redirecting to App Store...';
+                platformInfo.textContent = '🍎 iOS device detected';
+
+                // Try to open the app first (if installed), then fallback to App Store
+                setTimeout(() => {
+                    window.location.href = APP_STORE_URL;
+                }, 500);
+
+                // Show manual link after 3 seconds in case redirect fails
+                setTimeout(() => {
+                    spinner.style.display = 'none';
+                    manualLinks.style.display = 'block';
+                    iosLink.style.display = 'inline-block';
+                    message.textContent = 'If you weren\'t redirected automatically:';
+                }, 3000);
+
+            } else if (platform === 'android') {
+                message.textContent = 'Redirecting to Google Play...';
+                platformInfo.textContent = '🤖 Android device detected';
+
+                // Redirect to Play Store
+                setTimeout(() => {
+                    window.location.href = PLAY_STORE_URL;
+                }, 500);
+
+                // Show manual link after 3 seconds in case redirect fails
+                setTimeout(() => {
+                    spinner.style.display = 'none';
+                    manualLinks.style.display = 'block';
+                    androidLink.style.display = 'inline-block';
+                    message.textContent = 'If you weren\'t redirected automatically:';
+                }, 3000);
+
+            } else {
+                // Desktop or unknown platform
+                spinner.style.display = 'none';
+                message.textContent = 'Choose your platform:';
+                manualLinks.style.display = 'block';
+                iosLink.style.display = 'inline-block';
+                androidLink.style.display = 'inline-block';
+                platformInfo.textContent = '💻 Desktop detected - scan QR code or open on your mobile device';
+            }
+        }
+
+        // Run redirect on page load
+        window.onload = redirect;
+    </script>
+</body>
+
+</html>
