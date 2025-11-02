@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Purchases - AfterMatch Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8E44AD;
+            --secondary: #9B59B6;
+            --background: #ffffff;
+            --surface: #ffffff;
+            --text: #2C3E50;
+            --text-secondary: #7F8C8D;
+            --text-hint: #BDC3C7;
+            --border: #E2E8F0;
+            --error: #E74C3C;
+            --success: #27AE60;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #8E44AD 0%, #9B59B6 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Login Styles */
+        .login-container {
+            background: var(--surface);
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .message {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard-header {
+            background: var(--surface);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-info {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .purchases-table-container {
+            background: var(--surface);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text-hint);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8fafc;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-android {
+            background: #a5d6a7;
+            color: #2e7d32;
+        }
+
+        .badge-ios {
+            background: #90caf9;
+            color: #1565c0;
+        }
+
+        .badge-verified {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .coins-amount {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .timestamp {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            th,
+            td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Section -->
+    <div id="loginSection" class="login-container">
+        <div class="login-header">
+            <h1><i class="fas fa-fire"></i> AfterMatch</h1>
+            <p>Admin Panel - Coin Purchases</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn" id="loginBtn">
+                <span id="loginText">Sign In</span>
+                <span id="loginLoading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Signing in...
+                </span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" class="dashboard container">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-coins"></i> Coin Purchases</h1>
+            <div class="header-actions">
+                <div class="user-info" id="userInfo"></div>
+                <button class="btn btn-secondary" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="purchases-table-container">
+            <div class="table-header">
+                <h2>Purchase History</h2>
+            </div>
+
+            <div id="loadingState" class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading purchases...</p>
+            </div>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-inbox"></i>
+                <h3>No Purchases Found</h3>
+                <p>There are no coin purchases to display.</p>
+            </div>
+
+            <div id="tableContainer" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Amount</th>
+                            <th>Product</th>
+                            <th>Platform</th>
+                            <th>Transaction ID</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="purchasesTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4TQwbZ9gznvlfee_vsQ_Y9MDmqMI9-Vw",
+            authDomain: "afterm-5759a.firebaseapp.com",
+            projectId: "afterm-5759a",
+            storageBucket: "afterm-5759a.appspot.com",
+            messagingSenderId: "739324103655",
+            appId: "1:739324103655:web:a99fb32453d1c058fbcb42"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Initialize Firebase services
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // UI Elements
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginText = document.getElementById('loginText');
+        const loginLoading = document.getElementById('loginLoading');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userInfo = document.getElementById('userInfo');
+        const loadingState = document.getElementById('loadingState');
+        const emptyState = document.getElementById('emptyState');
+        const tableContainer = document.getElementById('tableContainer');
+        const purchasesTableBody = document.getElementById('purchasesTableBody');
+
+        // Check authentication state on load
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                // Check if user is admin
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                if (userDoc.exists && userDoc.data().isAdmin === true) {
+                    // User is admin, show dashboard
+                    showDashboard(user);
+                    loadPurchases();
+                } else {
+                    // Not admin, sign out and show login
+                    await auth.signOut();
+                    showLogin();
+                    showError('You are not authorized to access the admin panel.');
+                }
+            } else {
+                showLogin();
+            }
+        });
+
+        // Login form handler
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Show loading state
+            loginBtn.disabled = true;
+            loginText.style.display = 'none';
+            loginLoading.style.display = 'inline';
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            try {
+                // Sign in with Firebase Auth
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Check Firestore for isAdmin
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                if (userDoc.exists && userDoc.data().isAdmin === true) {
+                    // Success: show dashboard
+                    successMessage.textContent = 'Login successful!';
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        showDashboard(user);
+                        loadPurchases();
+                    }, 500);
+                } else {
+                    // Not admin: sign out and show error
+                    await auth.signOut();
+                    showError('You are not authorized to access the admin panel.');
+                    loginBtn.disabled = false;
+                    loginText.style.display = 'inline';
+                    loginLoading.style.display = 'none';
+                }
+            } catch (error) {
+                // Show error message
+                let errorMsg = 'Login failed. Please check your credentials.';
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorMsg = 'No account found with this email address.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMsg = 'Incorrect password.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMsg = 'Invalid email address.';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMsg = 'Too many failed attempts. Please try again later.';
+                        break;
+                }
+                showError(errorMsg);
+                loginBtn.disabled = false;
+                loginText.style.display = 'inline';
+                loginLoading.style.display = 'none';
+            }
+        });
+
+        // Logout handler
+        logoutBtn.addEventListener('click', async () => {
+            await auth.signOut();
+            showLogin();
+        });
+
+        // Show login screen
+        function showLogin() {
+            loginSection.style.display = 'block';
+            dashboardSection.style.display = 'none';
+        }
+
+        // Show dashboard
+        function showDashboard(user) {
+            loginSection.style.display = 'none';
+            dashboardSection.style.display = 'block';
+            userInfo.textContent = `Signed in as: ${user.email}`;
+        }
+
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+        }
+
+        // Format date
+        function formatDate(timestamp) {
+            if (!timestamp) return 'N/A';
+
+            let date;
+            if (timestamp.toDate) {
+                date = timestamp.toDate();
+            } else if (timestamp instanceof Date) {
+                date = timestamp;
+            } else {
+                return 'N/A';
+            }
+
+            return new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).format(date);
+        }
+
+        // Format number with commas
+        function formatNumber(num) {
+            return num.toLocaleString();
+        }
+
+        // Load purchases from Firestore
+        async function loadPurchases() {
+            loadingState.style.display = 'block';
+            emptyState.style.display = 'none';
+            tableContainer.style.display = 'none';
+
+            try {
+                // Fetch purchases ordered by timestamp (newest first)
+                const purchasesSnapshot = await db
+                    .collection('coin_purchases')
+                    .orderBy('timestamp', 'desc')
+                    .limit(1000)
+                    .get();
+
+                if (purchasesSnapshot.empty) {
+                    loadingState.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                // Fetch user data for each purchase
+                const purchases = [];
+                const userIds = new Set();
+
+                purchasesSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    userIds.add(data.userId);
+                    purchases.push({
+                        id: doc.id,
+                        ...data
+                    });
+                });
+
+                // Fetch user documents in batch
+                const userDataMap = new Map();
+                const userPromises = Array.from(userIds).map(async (userId) => {
+                    try {
+                        const userDoc = await db.collection('users').doc(userId).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            userDataMap.set(userId, {
+                                name: userData.name || 'Unknown User',
+                                email: userData.email || 'N/A'
+                            });
+                        } else {
+                            userDataMap.set(userId, {
+                                name: 'Unknown User',
+                                email: 'N/A'
+                            });
+                        }
+                    } catch (error) {
+                        console.error(`Error fetching user ${userId}:`, error);
+                        userDataMap.set(userId, {
+                            name: 'Unknown User',
+                            email: 'N/A'
+                        });
+                    }
+                });
+
+                await Promise.all(userPromises);
+
+                // Render table
+                purchasesTableBody.innerHTML = '';
+                purchases.forEach(purchase => {
+                    const user = userDataMap.get(purchase.userId) || { name: 'Unknown User', email: 'N/A' };
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="user-name">${escapeHtml(user.name)}</td>
+                        <td class="coins-amount">${formatNumber(purchase.amount || 0)} coins</td>
+                        <td>${escapeHtml(purchase.productId || 'N/A')}</td>
+                        <td>
+                            <span class="badge badge-${(purchase.platform || '').toLowerCase()}">
+                                ${(purchase.platform || 'N/A').toUpperCase()}
+                            </span>
+                        </td>
+                        <td style="font-size: 0.75rem; font-family: monospace; color: var(--text-secondary);">
+                            ${escapeHtml((purchase.transactionId || 'N/A').substring(0, 20))}...
+                        </td>
+                        <td class="timestamp">${formatDate(purchase.timestamp)}</td>
+                        <td>
+                            ${purchase.verified === true ?
+                            '<span class="badge badge-verified">Verified</span>' :
+                            '<span class="badge" style="background: #fff3cd; color: #856404;">Pending</span>'
+                        }
+                        </td>
+                    `;
+                    purchasesTableBody.appendChild(row);
+                });
+
+                loadingState.style.display = 'none';
+                emptyState.style.display = 'none';
+                tableContainer.style.display = 'block';
+            } catch (error) {
+                console.error('Error loading purchases:', error);
+                loadingState.style.display = 'none';
+                emptyState.style.display = 'block';
+                emptyState.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error Loading Purchases</h3>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+
+</html>
